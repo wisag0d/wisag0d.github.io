@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>161019:令CentOS自動啟動連結wifi | What i seen</title>
+    <meta name="description" content="A minimal hexo theme."/>
+    <meta name="keywords" content="hexo,theme,otakism,otaku"/>
+    <meta name="HandheldFriendly" content="True"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="google-site-verification" content=""/>
+    <meta name="baidu-site-verification" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="步驟說明首先我們必須先安裝 wireness-tools 以及 wpa_supplicant ，以達到連線的最基本條件。 並且先編輯 wlan0 無線裝置的設定來取的固定虛擬IP。再使用 wpa_passphrase 來生成WPA&#x2F;WPA2的加密密碼，最後啟用 wpa_supplicant 服務實驗是否成功上線，並最後使用 chkconfig 來設定成自動啟動的服務。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="161019:令CentOS自動啟動連結wifi">
+<meta property="og:url" content="http://eyes.milktea.site/2016/10/19/161019-CentOS6WPA2/index.html">
+<meta property="og:site_name" content="What i seen">
+<meta property="og:description" content="步驟說明首先我們必須先安裝 wireness-tools 以及 wpa_supplicant ，以達到連線的最基本條件。 並且先編輯 wlan0 無線裝置的設定來取的固定虛擬IP。再使用 wpa_passphrase 來生成WPA&#x2F;WPA2的加密密碼，最後啟用 wpa_supplicant 服務實驗是否成功上線，並最後使用 chkconfig 來設定成自動啟動的服務。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-10-19T05:48:13.000Z">
+<meta property="article:modified_time" content="2019-02-12T00:30:24.000Z">
+<meta property="article:author" content="Wacker the writer">
+<meta property="article:tag" content="CentOS6">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Wifi">
+<meta name="twitter:card" content="summary">
+    
+
+    <!-- Favicon -->
+    
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,700" rel="stylesheet">
+
+    
+<link rel="stylesheet" href="/style.css">
+
+    <script>
+      function setLoadingBarProgress(num) {
+        document.getElementById('loading-bar').style.width = num + "%";
+      }
+    </script>
+
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+
+<div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+<script>setLoadingBarProgress(20)</script>
+
+<div id="site-wrapper">
+
+    <header id="header">
+    <div id="header-wrapper" class="clearfix">
+        <a id="logo" href="/">
+            <img src="/img/logo.png"/>
+            <span id="site-desc">
+                whan i seen
+            </span>
+        </a>
+        <button id="site-nav-switch">
+            <span class="icon icon-menu"></span>
+        </button>
+    </div>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+
+    <main id="main" role="main">
+        <article id="post-161019-CentOS6WPA2"
+         class="post article white-box article-type-post"
+         itemscope itemprop="blogPost">
+    <h2 class="title">
+        <a href="/2016/10/19/161019-CentOS6WPA2/">
+            161019:令CentOS自動啟動連結wifi
+        </a>
+    </h2>
+    <time>
+        Oct 19, 2016
+    </time>
+    <section class="content">
+        <div class="article-entry" itemprop="articleBody">
+            <h1><span id="步驟說明">步驟說明</span></h1><p>首先我們必須先安裝 <code>wireness-tools</code> 以及 <code>wpa_supplicant</code> ，以達到連線的最基本條件。</p>
+<p>並且先編輯 <code>wlan0</code> 無線裝置的設定來取的固定虛擬IP。再使用 <code>wpa_passphrase</code> 來生成WPA/WPA2的加密密碼，最後啟用 <code>wpa_supplicant</code> 服務實驗是否成功上線，並最後使用 <code>chkconfig</code> 來設定成自動啟動的服務。</p>
+<a id="more"></a>
+
+<p>以下資料是參考</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.programgo.com/article/31923329233/">CentOS 命令行下连接加密模式为 WPA/WPA2-PSK 的无线网络</a> - 软件开发程序员博客文章收藏网</li>
+<li><a target="_blank" rel="noopener" href="http://blog.faq-book.com/?p=270">Chkconfig參數用法</a> - FAQ BOOK</li>
+<li><a target="_blank" rel="noopener" href="http://forums.fedoraforum.org/showthread.php?t=235989">How to set up a wpa2 wireless connection in F15 using the ifcfg method</a> - FedoraForum.org</li>
+</ul>
+<h1><span id="安裝">安裝</span></h1><p>這邊我們簡單的使用 <code>yum</code> 去安裝相關套件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum -y wireness-tools wpa_supplicant</span><br></pre></td></tr></table></figure>
+<p><em>-y: 不詢問即安裝。</em></p>
+<p> 除了想學更基本的連線方式外，本人不選擇使用 <code>wicd</code> 或是 <code>netctl</code> 等工具去弄的原因，是以完成輕量化的操作。並且我的電腦也不需要一直變動wifi。如果是拿linux當 <strong>桌面環境</strong> 的用戶， <strong>推薦</strong> 使用其他工具作為連wifi的工具。本人的ArchLinux筆電是用 <code>netctl</code>。</p>
+<h1><span id="設置">設置</span></h1><p>之後，我們要先設置 <code>wlan0</code> 的設定，以固定虛擬IP方便我未來 ssh 連進去。</p>
+<p>編輯 <code>/etc/sysconfig/network-scripts/ifcfg-wlan0</code>，將設置填加如下內容。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">ONBOOT&#x3D;yes</span><br><span class="line">BOOTPROTO&#x3D;static</span><br><span class="line">IPADDR&#x3D;192.168.1.8</span><br><span class="line">NETMASK&#x3D;255.255.255.0</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><em>ONBOOT: 系統啟動時，是否啟動這裝置</em></li>
+<li><em>BOOTPROTO: 是使用DHCP還是static</em></li>
+<li><em>IPADDR: 指定的IP</em></li>
+<li><em>NETMASK: 您的NETMASK</em></li>
+</ul>
+<p><em>還有不少設置，可以去做設定。</em></p>
+<p>設置完成後，其實就可以啟動並且掃描附近wifi了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ifup wlan0</span><br><span class="line">sudo iwlist wlan0</span><br></pre></td></tr></table></figure>
+
+<p>然候，選擇自己所有的wifi。並將它的ESSID記下來。之後，我們使用 <code>wpa_passphrase</code>   來加密自己的密碼，才能供WPA/WPA2使用。並做最後的啟動動作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo wpa_passphrase 1-3F &gt;&gt; &#x2F;etc&#x2F;wpa_supplicant&#x2F;wpa_supplicant.conf</span><br><span class="line">sudo &#x2F;etc&#x2F;ini.d&#x2F;wpa_supplicant start</span><br></pre></td></tr></table></figure>
+
+<p>最後，我們可以使用 <code>iwconfig</code> 來了解是不是啟動成功。以及使用 <code>ping -c 3 google.com</code> 來看是不是有連上網路。</p>
+<h1><span id="自動啟動">自動啟動</span></h1><p>最後我們使用 <code>sudo chkconfig --level 235 wpa_supplicant on</code> 來自動啟動即可，以下是chkconfig的細項。</p>
+<ul>
+<li><code>--level</code>: 指定服務要在哪個等級下開啟或關閉。<ul>
+<li>0: 關機</li>
+<li>1: 單用戶模式</li>
+<li>2: 無網路連線的多用戶命令行模式</li>
+<li>3: 有網路連線的多用戶命令行模式</li>
+<li>4: 不可用</li>
+<li>5: 帶圖形介面的多用戶命令行模式</li>
+<li>6: 重新啟動</li>
+</ul>
+</li>
+<li><code>--add</code>: 新增指定的服務</li>
+<li><code>--del</code>: 刪除指定的服務</li>
+<li><code>--list</code>: 列出所有服務運行情況，如果指定名稱則顯示設定的等級。</li>
+</ul>
+
+        </div>
+        <div class="article-tags tags">
+            
+                <a class="tag-none-link" href="/tags/CentOS6/" rel="tag">CentOS6</a><a class="tag-none-link" href="/tags/Linux/" rel="tag">Linux</a><a class="tag-none-link" href="/tags/Wifi/" rel="tag">Wifi</a>
+            
+        </div>
+    </section>
+</article>
+
+
+
+
+
+        <script>setLoadingBarProgress(60);</script>
+    </main>
+
+    <footer id="footer" class="clearfix">
+
+    
+
+    <div class="social-wrapper">
+        
+            
+                <a href="https://github.com/artchen" class="social github"
+                   target="_blank" rel="external">
+                    <span class="icon icon-github"></span>
+                </a>
+            
+                <a href="/atom.xml" class="social rss"
+                   target="_blank" rel="external">
+                    <span class="icon icon-rss"></span>
+                </a>
+            
+        
+    </div>
+
+    <div class="theme-by">Theme <span class="codename">Memory</span> designed by <a href="https://artifact.me/"
+                                                                                    target="_blank">Art Chen</a>.
+    </div>
+    <div>&copy; <a href="/">What i seen</a></div>
+
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+    <div class="overlay"></div>
+</div>
+
+<div class="site-sidebar" id="site-sidebar">
+
+    
+
+    <div class="sidebar-switch clearfix "
+         style="display: none">
+        <a class="dark-btn active" data-toggle="toc">
+            <span class="icon icon-list"></span>
+            <span class="text">Index</span>
+        </a>
+        <a class="dark-btn" data-toggle="bio">
+            <span class="icon icon-person"></span>
+            <span class="text">Bio</span>
+        </a>
+    </div>
+
+    <div class="site-toc "
+         style="display: none">
+        
+            <div class="no-index">No Index</div>
+        
+    </div>
+
+    <div class="site-bio show"
+         style="display: block">
+
+        <div class="about-me clearfix">
+            <div class="avatar">
+                <img src="/img/avatar.png"/>
+            </div>
+            <div class="info">
+                <a class="name dark-btn" href="/about">
+                    Wacker the writer
+                </a>
+            </div>
+            <div class="info">
+                <span class="item desc">
+                    
+                </span>
+            </div>
+        </div>
+
+        <div class="menu section">
+            <ul class="clearfix">
+                
+                    <li class="left">
+                        <a href="/about"
+                           onfocus="this.blur();"
+                           class="nav-about dark-btn block">
+                            About
+                        </a>
+                    </li>
+                
+                    <li class="right">
+                        <a href="/archives"
+                           onfocus="this.blur();"
+                           class="nav-archives dark-btn block">
+                            Archives
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="shortcuts">
+        <a href="#header" class="top window-nav dark-btn" id="go-top">
+            <span class="icon icon-chevron-thin-up"></span>
+        </a>
+        <a class="close dark-btn" id="sidebar-close">
+            <span class="icon icon-close"></span>
+        </a>
+        <a href="#footer" class="top window-nav dark-btn" id="go-bottom">
+            <span class="icon icon-chevron-thin-down"></span>
+        </a>
+    </div>
+
+</div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+
+<script src="/js/jquery.fitvids.js"></script>
+
+<script>
+  var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+  var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+  var ALGOLIA_API_KEY = "";
+  var ALGOLIA_APP_ID = "";
+  var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var SEARCH_SERVICE = "";
+  var universalSearchConfig = {};
+  if (SEARCH_SERVICE === 'google') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      apiKey: GOOGLE_CUSTOM_SEARCH_API_KEY,
+      engineId: GOOGLE_CUSTOM_SEARCH_ENGINE_ID,
+      imagePath: "/img/"
+    };
+  } else if (SEARCH_SERVICE === 'algolia') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      apiKey: ALGOLIA_API_KEY,
+      appId: ALGOLIA_APP_ID,
+      indexName: ALGOLIA_INDEX_NAME,
+      imagePath: "/img/"
+    };
+  } else if (SEARCH_SERVICE === 'azure') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      serviceName: AZURE_SERVICE_NAME,
+      indexName: AZURE_INDEX_NAME,
+      apiKey: AZURE_QUERY_KEY,
+      imagePath: "/img/"
+    };
+  }
+</script>
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/search.js"></script>
+
+
+
+
+
+<script>setLoadingBarProgress(100);</script>
+
+</body>
+</html>

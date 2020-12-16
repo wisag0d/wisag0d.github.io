@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>160919:自動將備份傳到Dropbox上 | What i seen</title>
+    <meta name="description" content="A minimal hexo theme."/>
+    <meta name="keywords" content="hexo,theme,otakism,otaku"/>
+    <meta name="HandheldFriendly" content="True"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="google-site-verification" content=""/>
+    <meta name="baidu-site-verification" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="步驟說明這邊我們要使用一樣Bash的腳本，來上傳讓我們的檔案上傳到Dropbox上面。那也就是 andreafabrizi&#x2F;Dropbox-Uploader 這款Shell script。可以幫助我們上傳與下載Dropbox檔案，不過這邊就先單純使用它的上傳功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="160919:自動將備份傳到Dropbox上">
+<meta property="og:url" content="http://eyes.milktea.site/2016/09/19/160919-Dropbox-Uploader/index.html">
+<meta property="og:site_name" content="What i seen">
+<meta property="og:description" content="步驟說明這邊我們要使用一樣Bash的腳本，來上傳讓我們的檔案上傳到Dropbox上面。那也就是 andreafabrizi&#x2F;Dropbox-Uploader 這款Shell script。可以幫助我們上傳與下載Dropbox檔案，不過這邊就先單純使用它的上傳功能。">
+<meta property="og:locale">
+<meta property="og:image" content="http://imgur.com/GisfJbc.png">
+<meta property="og:image" content="http://imgur.com/j8pTUoX.png">
+<meta property="og:image" content="http://imgur.com/UrHGdcv.png">
+<meta property="og:image" content="http://imgur.com/4Sl7ZOy.png">
+<meta property="og:image" content="http://imgur.com/OyJJwHH.png">
+<meta property="article:published_time" content="2016-09-19T00:48:13.000Z">
+<meta property="article:modified_time" content="2019-02-12T00:30:24.000Z">
+<meta property="article:author" content="Wacker the writer">
+<meta property="article:tag" content="Dropbox">
+<meta property="article:tag" content="Shell Script">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://imgur.com/GisfJbc.png">
+    
+
+    <!-- Favicon -->
+    
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,700" rel="stylesheet">
+
+    
+<link rel="stylesheet" href="/style.css">
+
+    <script>
+      function setLoadingBarProgress(num) {
+        document.getElementById('loading-bar').style.width = num + "%";
+      }
+    </script>
+
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+
+<div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+<script>setLoadingBarProgress(20)</script>
+
+<div id="site-wrapper">
+
+    <header id="header">
+    <div id="header-wrapper" class="clearfix">
+        <a id="logo" href="/">
+            <img src="/img/logo.png"/>
+            <span id="site-desc">
+                whan i seen
+            </span>
+        </a>
+        <button id="site-nav-switch">
+            <span class="icon icon-menu"></span>
+        </button>
+    </div>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+
+    <main id="main" role="main">
+        <article id="post-160919-Dropbox-Uploader"
+         class="post article white-box article-type-post"
+         itemscope itemprop="blogPost">
+    <h2 class="title">
+        <a href="/2016/09/19/160919-Dropbox-Uploader/">
+            160919:自動將備份傳到Dropbox上
+        </a>
+    </h2>
+    <time>
+        Sep 19, 2016
+    </time>
+    <section class="content">
+        <div class="article-entry" itemprop="articleBody">
+            <h1><span id="步驟說明">步驟說明</span></h1><p>這邊我們要使用一樣Bash的腳本，來上傳讓我們的檔案上傳到Dropbox上面。那也就是 <code>andreafabrizi/Dropbox-Uploader</code> 這款Shell script。可以幫助我們上傳與下載Dropbox檔案，不過這邊就先單純使用它的上傳功能。</p>
+<a id="more"></a>
+
+<p>我們得先下載這腳本，然後設置它與Dropbox上傳不需要額外輸入帳號密碼的設置。</p>
+<p>本文章參考至 <a target="_blank" rel="noopener" href="https://github.com/andreafabrizi/Dropbox-Uploader">andreafabrizi/Dropbox-Uploader - Github</a> 這項專案。</p>
+<h1><span id="step-1-下載腳本">Step 1 - 下載腳本</span></h1><p>這邊很簡單，這腳本除了 <strong>cURL</strong> 外，貌似也不太需要其他特別的支援。所以我們只要直接從 Github 上面下載這腳本即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;andreafabrizi&#x2F;Dropbox-Uploader</span><br></pre></td></tr></table></figure>
+
+<p>然後，檔案中的 <code>dropbox_uploader.sh</code> 也就是我們需要的執行腳本。</p>
+<h1><span id="step-2-dropbox設置">Step 2 - Dropbox設置</span></h1><p>接下來，我們必須使 Dropbox 同意使用這個腳本，所以我們要先到Dropbox的官方網站去設定。</p>
+<ul>
+<li>Dropbox官方網站登入後，找左下角的選項點選 <strong>開發人員</strong><br><img src="http://imgur.com/GisfJbc.png" alt="step1"></li>
+<li>之後點選左邊的 <strong>my app</strong><br><img src="http://imgur.com/j8pTUoX.png" alt="step2"></li>
+<li>並點選右上角的 <strong>Create App</strong><br><img src="http://imgur.com/UrHGdcv.png" alt="Step3"></li>
+<li>選擇個人還是企業使用，以及要管理整個Dropbox或是程式個別的資料夾，以及其名字<br><img src="http://imgur.com/4Sl7ZOy.png" alt="Step4"></li>
+<li>之後進入設定，在 <strong>OAuth2</strong> 下有個 <strong>Generated access token</strong>，在那邊複製Token碼，待會會用到。<br><img src="http://imgur.com/OyJJwHH.png" alt="Step5"></li>
+</ul>
+<p>之後也就進入重要的部分，我們的程式也視需要設置的。而我們只要執行一次 <code>dropbox_uploader.sh</code> 就會跟我們要求Token碼了。這時候只要輸入剛剛獲得的Token碼，也就能完成設定。</p>
+<h1><span id="step-3-dropbox-uploader使用方法">Step 3 - Dropbox Uploader使用方法</span></h1><p>這邊就直接翻譯作者文件的本文，給各位做為參考。</p>
+<h2><span id="指令">指令</span></h2><ul>
+<li><strong>upload</strong> &lt;本地位置&gt; &lt;目標位置&gt;<br>上傳檔案到Dropbox硬碟上</li>
+<li><strong>download</strong> &lt;目標位置&gt; [本地位置]<br>下載檔案到本地。如果沒有寫本地位置，會直接下載到所在資料夾中。</li>
+<li><strong>delete</strong> &lt;目標位置&gt;<br>刪除指定檔案。</li>
+<li><strong>move</strong> &lt;目標位置&gt; &lt;目標位置&gt;<br>將檔案移動。</li>
+<li><strong>copy</strong> &lt;目標位置&gt; &lt;目標位置&gt;<br>複製指定檔案。</li>
+<li><strong>mkdir</strong> &lt;目標資料夾&gt;<br>創建資料夾。</li>
+<li><strong>list</strong> [目標位置]<br>輸出資料夾下的檔案列表。如無輸入目標，即輸出根目錄的檔案列表。</li>
+<li><strong>share</strong> &lt;目標位置&gt;<br>輸出檔案的共享網址。</li>
+<li><strong>saveurl</strong> &lt;網址&gt; &lt;目標位置&gt;<br>將網址的檔案放到目標位置上。</li>
+<li><strong>search</strong> &lt;查詢&gt;<br>查詢Dropbox上的檔案，並輸出匹配的檔案列表。</li>
+<li><strong>info</strong><br>輸出Dropbox的帳戶資訊狀況。</li>
+<li><strong>space</strong><br>輸出Dropbox的空間使用狀況。</li>
+<li><strong>unlink</strong><br>取消你與帳戶的連結。</li>
+</ul>
+<h2><span id="參數">參數</span></h2><ul>
+<li><strong>-f</strong> &lt;檔案名稱&gt;<br>加載特定設定。</li>
+<li><strong>-s</strong><br>跳過已存在的檔案。預設是覆蓋。</li>
+<li><strong>-d</strong><br>開啟 DEBUG 模式。</li>
+<li><strong>-q</strong><br>開啟安靜模式，不會回報任何資訊。</li>
+<li><strong>-h</strong><br>顯示檔案大小，以簡單方式顯示。</li>
+<li><strong>-p</strong><br>顯示cURL的進度條。</li>
+<li><strong>-k</strong><br>不檢查SSL證書。</li>
+</ul>
+<p>接下來額外的腳本內容，也就請各位自己發揮創意去寫。</p>
+
+        </div>
+        <div class="article-tags tags">
+            
+                <a class="tag-none-link" href="/tags/Dropbox/" rel="tag">Dropbox</a><a class="tag-none-link" href="/tags/Linux/" rel="tag">Linux</a><a class="tag-none-link" href="/tags/Shell-Script/" rel="tag">Shell Script</a>
+            
+        </div>
+    </section>
+</article>
+
+
+
+
+
+        <script>setLoadingBarProgress(60);</script>
+    </main>
+
+    <footer id="footer" class="clearfix">
+
+    
+
+    <div class="social-wrapper">
+        
+            
+                <a href="https://github.com/artchen" class="social github"
+                   target="_blank" rel="external">
+                    <span class="icon icon-github"></span>
+                </a>
+            
+                <a href="/atom.xml" class="social rss"
+                   target="_blank" rel="external">
+                    <span class="icon icon-rss"></span>
+                </a>
+            
+        
+    </div>
+
+    <div class="theme-by">Theme <span class="codename">Memory</span> designed by <a href="https://artifact.me/"
+                                                                                    target="_blank">Art Chen</a>.
+    </div>
+    <div>&copy; <a href="/">What i seen</a></div>
+
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+    <div class="overlay"></div>
+</div>
+
+<div class="site-sidebar" id="site-sidebar">
+
+    
+
+    <div class="sidebar-switch clearfix "
+         style="display: none">
+        <a class="dark-btn active" data-toggle="toc">
+            <span class="icon icon-list"></span>
+            <span class="text">Index</span>
+        </a>
+        <a class="dark-btn" data-toggle="bio">
+            <span class="icon icon-person"></span>
+            <span class="text">Bio</span>
+        </a>
+    </div>
+
+    <div class="site-toc "
+         style="display: none">
+        
+            <div class="no-index">No Index</div>
+        
+    </div>
+
+    <div class="site-bio show"
+         style="display: block">
+
+        <div class="about-me clearfix">
+            <div class="avatar">
+                <img src="/img/avatar.png"/>
+            </div>
+            <div class="info">
+                <a class="name dark-btn" href="/about">
+                    Wacker the writer
+                </a>
+            </div>
+            <div class="info">
+                <span class="item desc">
+                    
+                </span>
+            </div>
+        </div>
+
+        <div class="menu section">
+            <ul class="clearfix">
+                
+                    <li class="left">
+                        <a href="/about"
+                           onfocus="this.blur();"
+                           class="nav-about dark-btn block">
+                            About
+                        </a>
+                    </li>
+                
+                    <li class="right">
+                        <a href="/archives"
+                           onfocus="this.blur();"
+                           class="nav-archives dark-btn block">
+                            Archives
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="shortcuts">
+        <a href="#header" class="top window-nav dark-btn" id="go-top">
+            <span class="icon icon-chevron-thin-up"></span>
+        </a>
+        <a class="close dark-btn" id="sidebar-close">
+            <span class="icon icon-close"></span>
+        </a>
+        <a href="#footer" class="top window-nav dark-btn" id="go-bottom">
+            <span class="icon icon-chevron-thin-down"></span>
+        </a>
+    </div>
+
+</div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+
+<script src="/js/jquery.fitvids.js"></script>
+
+<script>
+  var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+  var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+  var ALGOLIA_API_KEY = "";
+  var ALGOLIA_APP_ID = "";
+  var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var SEARCH_SERVICE = "";
+  var universalSearchConfig = {};
+  if (SEARCH_SERVICE === 'google') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      apiKey: GOOGLE_CUSTOM_SEARCH_API_KEY,
+      engineId: GOOGLE_CUSTOM_SEARCH_ENGINE_ID,
+      imagePath: "/img/"
+    };
+  } else if (SEARCH_SERVICE === 'algolia') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      apiKey: ALGOLIA_API_KEY,
+      appId: ALGOLIA_APP_ID,
+      indexName: ALGOLIA_INDEX_NAME,
+      imagePath: "/img/"
+    };
+  } else if (SEARCH_SERVICE === 'azure') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      serviceName: AZURE_SERVICE_NAME,
+      indexName: AZURE_INDEX_NAME,
+      apiKey: AZURE_QUERY_KEY,
+      imagePath: "/img/"
+    };
+  }
+</script>
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/search.js"></script>
+
+
+
+
+
+<script>setLoadingBarProgress(100);</script>
+
+</body>
+</html>

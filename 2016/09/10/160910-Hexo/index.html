@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>160910:Hexo使用教學並搭建在Nginx上 | What i seen</title>
+    <meta name="description" content="A minimal hexo theme."/>
+    <meta name="keywords" content="hexo,theme,otakism,otaku"/>
+    <meta name="HandheldFriendly" content="True"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="google-site-verification" content=""/>
+    <meta name="baidu-site-verification" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="步驟說明Hexo是款 Node.js 寫的 以Markdown為主的靜態式Blog。將自己的md檔寫好後，放在檔案裏面後，將其轉換成靜態的HTML檔。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="160910:Hexo使用教學並搭建在Nginx上">
+<meta property="og:url" content="http://eyes.milktea.site/2016/09/10/160910-Hexo/index.html">
+<meta property="og:site_name" content="What i seen">
+<meta property="og:description" content="步驟說明Hexo是款 Node.js 寫的 以Markdown為主的靜態式Blog。將自己的md檔寫好後，放在檔案裏面後，將其轉換成靜態的HTML檔。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-09-10T15:06:48.000Z">
+<meta property="article:modified_time" content="2019-02-12T00:30:24.000Z">
+<meta property="article:author" content="Wacker the writer">
+<meta property="article:tag" content="1609">
+<meta property="article:tag" content="CentOS6">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="Markdown">
+<meta name="twitter:card" content="summary">
+    
+
+    <!-- Favicon -->
+    
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,700" rel="stylesheet">
+
+    
+<link rel="stylesheet" href="/style.css">
+
+    <script>
+      function setLoadingBarProgress(num) {
+        document.getElementById('loading-bar').style.width = num + "%";
+      }
+    </script>
+
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+
+<div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+
+<script>setLoadingBarProgress(20)</script>
+
+<div id="site-wrapper">
+
+    <header id="header">
+    <div id="header-wrapper" class="clearfix">
+        <a id="logo" href="/">
+            <img src="/img/logo.png"/>
+            <span id="site-desc">
+                whan i seen
+            </span>
+        </a>
+        <button id="site-nav-switch">
+            <span class="icon icon-menu"></span>
+        </button>
+    </div>
+</header>
+    <script>setLoadingBarProgress(40);</script>
+
+    <main id="main" role="main">
+        <article id="post-160910-Hexo"
+         class="post article white-box article-type-post"
+         itemscope itemprop="blogPost">
+    <h2 class="title">
+        <a href="/2016/09/10/160910-Hexo/">
+            160910:Hexo使用教學並搭建在Nginx上
+        </a>
+    </h2>
+    <time>
+        Sep 10, 2016
+    </time>
+    <section class="content">
+        <div class="article-entry" itemprop="articleBody">
+            <h1><span id="步驟說明">步驟說明</span></h1><p>Hexo是款 Node.js 寫的 以Markdown為主的靜態式Blog。將自己的md檔寫好後，放在檔案裏面後，將其轉換成靜態的HTML檔。</p>
+<a id="more"></a>
+
+<p>所以，主要步驟就是使用 Node.js 的軟體安裝器 npm 來安裝 Hexo 這款軟體後，建立一個部落格後。設置基本設置後，編寫新的文章。最後，再將其輸出成靜態網站，並上傳至自己的網頁伺服器中。</p>
+<p>本文章參考至 <a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-create-a-blog-with-hexo-on-ubuntu-14-04">How to Create a Blog with Hexo On Ubuntu 14.04</a> - DigitalOcean.com by C.J. Scarlett</p>
+<h1><span id="step-1-安裝">Step 1 - 安裝</span></h1><p>首先我們必須安裝Hexo的基本套件，所以我們直接在終端機打入指令，安裝<code>hexo-cli</code>即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+
+<p>接下來，除了基本套件外也要記得安裝伺服器版本，以讓自己可以進行測試用途。只要安裝<code>hexo-server</code>這個套件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-server -g </span><br></pre></td></tr></table></figure>
+
+<p>這樣我們就完成了基本需要的部分，如有其他需要的套件也可以在 npm 上搜索到。</p>
+<p>接下來，我們必須設定一個專門放部落格的位置。這邊我們直接在本地下建立一個 <strong>blog</strong> 資料夾。並進行安裝。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init ~&#x2F;blog</span><br><span class="line">cd ~&#x2F;hexo_blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<h1><span id="step-2-基本設置">Step 2 - 基本設置</span></h1><p>接下來我們要將我們建設的部落格，來作設置的動作。這就需要去編輯 <strong>blog</strong> 資料夾中的 <code>_config.yml</code> 了。</p>
+<p>首先，先設定網頁資訊。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: #部落格名稱</span><br><span class="line">subtitle: #部落格說明</span><br><span class="line">description: #自介</span><br><span class="line">author: #名字</span><br><span class="line">language: zh-tw #語言</span><br><span class="line">timezone: Asia&#x2F;Taipei #時區</span><br></pre></td></tr></table></figure>
+
+<p>然後，我們要來設定檔案位置與檔案的部分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &#39;http:&#x2F;&#x2F;yoursite.com&#x2F;child&#39; and root as &#39;&#x2F;child&#x2F;&#39;</span><br><span class="line">url: http:&#x2F;&#x2F;localhost #網址</span><br><span class="line">root: &#x2F; #存放目錄</span><br><span class="line">permalink: :year&#x2F;:month&#x2F;:day&#x2F;:title&#x2F; #文章存放位置</span><br><span class="line">permalink_defaults:</span><br></pre></td></tr></table></figure>
+
+<h1><span id="step-3-編寫新的文章">Step 3 - 編寫新的文章</span></h1><p>接下來，我們要來建立新的文章來測試。就以 <strong>first-post</strong> 作為命名吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new first-post</span><br></pre></td></tr></table></figure>
+<p><em>雖然檔案系統是支援中文，不過推薦文章都以英文命名。之後Markdown內文再修改成中文即可</em></p>
+<p>之後，它將會顯示它建立的位置在哪裡。你就可以直接過去編輯它。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO  Created: ~&#x2F;blog&#x2F;source&#x2F;_post&#x2F;first-post.md</span><br></pre></td></tr></table></figure>
+
+<p>內容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">title: 新文章名稱</span><br><span class="line">tags:</span><br><span class="line">  - 你的標籤</span><br><span class="line">  - 可以不斷加下去</span><br><span class="line">categories:</span><br><span class="line">  - 你的分類</span><br><span class="line">comments: true #是否要使用留言功能</span><br><span class="line">date: 2015-12-31 00:00:00 #文章編寫時間</span><br><span class="line">---</span><br><span class="line">以及你的Markdown內文在這邊。</span><br></pre></td></tr></table></figure>
+
+<h1><span id="step-5-開始測試">Step 5 - 開始測試</span></h1><p>接下來我們要使用測試功能，也就是Hexo的伺服器功能。所以我們只要敲入指令即可開啟。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p><em>注意: 這個指令必須要在 blog 資料夾中才有作用。</em></p>
+<p>之後它就會顯示你的網頁位置，正常來講都是 *<a target="_blank" rel="noopener" href="http://localhost:4000/*%EF%BC%8C%E6%89%80%E4%BB%A5%E6%88%91%E5%80%91%E5%B0%B1%E9%80%B2%E5%8E%BB%E8%A8%AA%E5%95%8F%E4%B8%80%E4%B8%8B%E5%8D%B3%E5%8F%AF%E3%80%82">http://localhost:4000/*，所以我們就進去訪問一下即可。</a></p>
+<p>之後，如果要關閉了。直接使用 終端程式程式關閉法 <strong>Ctrl+C</strong> 即可。</p>
+<p><em>伺服器功能比較容易吃效能，所以並不推薦直接使用這個功能作為伺服器給大家看。</em></p>
+<h1><span id="step-6-輸出與上傳">Step 6 - 輸出與上傳</span></h1><p>接下來，如果在本地有用 Nginx 網頁伺服器的話，我們就可以找個目錄來跟部落格作連結。我的作法是這樣。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p &#x2F;var&#x2F;www&#x2F;html&#x2F;blog</span><br><span class="line">sudo chown -R $USER:$USER &#x2F;var&#x2F;www&#x2F;html&#x2F;blog</span><br><span class="line">ln -s &#x2F;var&#x2F;www&#x2F;html&#x2F;blog .&#x2F;blog&#x2F;public</span><br></pre></td></tr></table></figure>
+
+<p>然後，我們就可以進行輸出的動作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure>
+
+<p>這樣就大功告成了。自己的靜態Markdown部落格建置完成。</p>
+
+        </div>
+        <div class="article-tags tags">
+            
+                <a class="tag-none-link" href="/tags/1609/" rel="tag">1609</a><a class="tag-none-link" href="/tags/CentOS6/" rel="tag">CentOS6</a><a class="tag-none-link" href="/tags/Hexo/" rel="tag">Hexo</a><a class="tag-none-link" href="/tags/Markdown/" rel="tag">Markdown</a>
+            
+        </div>
+    </section>
+</article>
+
+
+
+
+
+        <script>setLoadingBarProgress(60);</script>
+    </main>
+
+    <footer id="footer" class="clearfix">
+
+    
+
+    <div class="social-wrapper">
+        
+            
+                <a href="https://github.com/artchen" class="social github"
+                   target="_blank" rel="external">
+                    <span class="icon icon-github"></span>
+                </a>
+            
+                <a href="/atom.xml" class="social rss"
+                   target="_blank" rel="external">
+                    <span class="icon icon-rss"></span>
+                </a>
+            
+        
+    </div>
+
+    <div class="theme-by">Theme <span class="codename">Memory</span> designed by <a href="https://artifact.me/"
+                                                                                    target="_blank">Art Chen</a>.
+    </div>
+    <div>&copy; <a href="/">What i seen</a></div>
+
+</footer>
+
+
+    <script>setLoadingBarProgress(80);</script>
+    <div class="overlay"></div>
+</div>
+
+<div class="site-sidebar" id="site-sidebar">
+
+    
+
+    <div class="sidebar-switch clearfix "
+         style="display: none">
+        <a class="dark-btn active" data-toggle="toc">
+            <span class="icon icon-list"></span>
+            <span class="text">Index</span>
+        </a>
+        <a class="dark-btn" data-toggle="bio">
+            <span class="icon icon-person"></span>
+            <span class="text">Bio</span>
+        </a>
+    </div>
+
+    <div class="site-toc "
+         style="display: none">
+        
+            <div class="no-index">No Index</div>
+        
+    </div>
+
+    <div class="site-bio show"
+         style="display: block">
+
+        <div class="about-me clearfix">
+            <div class="avatar">
+                <img src="/img/avatar.png"/>
+            </div>
+            <div class="info">
+                <a class="name dark-btn" href="/about">
+                    Wacker the writer
+                </a>
+            </div>
+            <div class="info">
+                <span class="item desc">
+                    
+                </span>
+            </div>
+        </div>
+
+        <div class="menu section">
+            <ul class="clearfix">
+                
+                    <li class="left">
+                        <a href="/about"
+                           onfocus="this.blur();"
+                           class="nav-about dark-btn block">
+                            About
+                        </a>
+                    </li>
+                
+                    <li class="right">
+                        <a href="/archives"
+                           onfocus="this.blur();"
+                           class="nav-archives dark-btn block">
+                            Archives
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="shortcuts">
+        <a href="#header" class="top window-nav dark-btn" id="go-top">
+            <span class="icon icon-chevron-thin-up"></span>
+        </a>
+        <a class="close dark-btn" id="sidebar-close">
+            <span class="icon icon-close"></span>
+        </a>
+        <a href="#footer" class="top window-nav dark-btn" id="go-bottom">
+            <span class="icon icon-chevron-thin-down"></span>
+        </a>
+    </div>
+
+</div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+
+
+<script src="/js/jquery.fitvids.js"></script>
+
+<script>
+  var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+  var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+  var ALGOLIA_API_KEY = "";
+  var ALGOLIA_APP_ID = "";
+  var ALGOLIA_INDEX_NAME = "";
+  var AZURE_SERVICE_NAME = "";
+  var AZURE_INDEX_NAME = "";
+  var AZURE_QUERY_KEY = "";
+  var SEARCH_SERVICE = "";
+  var universalSearchConfig = {};
+  if (SEARCH_SERVICE === 'google') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      apiKey: GOOGLE_CUSTOM_SEARCH_API_KEY,
+      engineId: GOOGLE_CUSTOM_SEARCH_ENGINE_ID,
+      imagePath: "/img/"
+    };
+  } else if (SEARCH_SERVICE === 'algolia') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      apiKey: ALGOLIA_API_KEY,
+      appId: ALGOLIA_APP_ID,
+      indexName: ALGOLIA_INDEX_NAME,
+      imagePath: "/img/"
+    };
+  } else if (SEARCH_SERVICE === 'azure') {
+    universalSearchConfig = {
+      searchService: SEARCH_SERVICE,
+      serviceName: AZURE_SERVICE_NAME,
+      indexName: AZURE_INDEX_NAME,
+      apiKey: AZURE_QUERY_KEY,
+      imagePath: "/img/"
+    };
+  }
+</script>
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/search.js"></script>
+
+
+
+
+
+<script>setLoadingBarProgress(100);</script>
+
+</body>
+</html>
