@@ -20,9 +20,8 @@
 <meta property="og:description" content="步驟說明Hexo是款 Node.js 寫的 以Markdown為主的靜態式Blog。將自己的md檔寫好後，放在檔案裏面後，將其轉換成靜態的HTML檔。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2016-09-10T15:06:48.000Z">
-<meta property="article:modified_time" content="2019-02-12T00:30:24.000Z">
+<meta property="article:modified_time" content="2020-12-31T03:16:08.308Z">
 <meta property="article:author" content="Wacker the writer">
-<meta property="article:tag" content="1609">
 <meta property="article:tag" content="CentOS6">
 <meta property="article:tag" content="Hexo">
 <meta property="article:tag" content="Markdown">
@@ -93,30 +92,23 @@
 <p>本文章參考至 <a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-create-a-blog-with-hexo-on-ubuntu-14-04">How to Create a Blog with Hexo On Ubuntu 14.04</a> - DigitalOcean.com by C.J. Scarlett</p>
 <h1><span id="step-1-安裝">Step 1 - 安裝</span></h1><p>首先我們必須安裝Hexo的基本套件，所以我們直接在終端機打入指令，安裝<code>hexo-cli</code>即可。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
-
 <p>接下來，除了基本套件外也要記得安裝伺服器版本，以讓自己可以進行測試用途。只要安裝<code>hexo-server</code>這個套件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-server -g </span><br></pre></td></tr></table></figure>
-
 <p>這樣我們就完成了基本需要的部分，如有其他需要的套件也可以在 npm 上搜索到。</p>
 <p>接下來，我們必須設定一個專門放部落格的位置。這邊我們直接在本地下建立一個 <strong>blog</strong> 資料夾。並進行安裝。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init ~&#x2F;blog</span><br><span class="line">cd ~&#x2F;hexo_blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-
 <h1><span id="step-2-基本設置">Step 2 - 基本設置</span></h1><p>接下來我們要將我們建設的部落格，來作設置的動作。這就需要去編輯 <strong>blog</strong> 資料夾中的 <code>_config.yml</code> 了。</p>
 <p>首先，先設定網頁資訊。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: #部落格名稱</span><br><span class="line">subtitle: #部落格說明</span><br><span class="line">description: #自介</span><br><span class="line">author: #名字</span><br><span class="line">language: zh-tw #語言</span><br><span class="line">timezone: Asia&#x2F;Taipei #時區</span><br></pre></td></tr></table></figure>
-
 <p>然後，我們要來設定檔案位置與檔案的部分。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &#39;http:&#x2F;&#x2F;yoursite.com&#x2F;child&#39; and root as &#39;&#x2F;child&#x2F;&#39;</span><br><span class="line">url: http:&#x2F;&#x2F;localhost #網址</span><br><span class="line">root: &#x2F; #存放目錄</span><br><span class="line">permalink: :year&#x2F;:month&#x2F;:day&#x2F;:title&#x2F; #文章存放位置</span><br><span class="line">permalink_defaults:</span><br></pre></td></tr></table></figure>
-
 <h1><span id="step-3-編寫新的文章">Step 3 - 編寫新的文章</span></h1><p>接下來，我們要來建立新的文章來測試。就以 <strong>first-post</strong> 作為命名吧。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new first-post</span><br></pre></td></tr></table></figure>
 <p><em>雖然檔案系統是支援中文，不過推薦文章都以英文命名。之後Markdown內文再修改成中文即可</em></p>
 <p>之後，它將會顯示它建立的位置在哪裡。你就可以直接過去編輯它。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO  Created: ~&#x2F;blog&#x2F;source&#x2F;_post&#x2F;first-post.md</span><br></pre></td></tr></table></figure>
-
 <p>內容如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">title: 新文章名稱</span><br><span class="line">tags:</span><br><span class="line">  - 你的標籤</span><br><span class="line">  - 可以不斷加下去</span><br><span class="line">categories:</span><br><span class="line">  - 你的分類</span><br><span class="line">comments: true #是否要使用留言功能</span><br><span class="line">date: 2015-12-31 00:00:00 #文章編寫時間</span><br><span class="line">---</span><br><span class="line">以及你的Markdown內文在這邊。</span><br></pre></td></tr></table></figure>
-
 <h1><span id="step-5-開始測試">Step 5 - 開始測試</span></h1><p>接下來我們要使用測試功能，也就是Hexo的伺服器功能。所以我們只要敲入指令即可開啟。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
 <p><em>注意: 這個指令必須要在 blog 資料夾中才有作用。</em></p>
@@ -125,16 +117,14 @@
 <p><em>伺服器功能比較容易吃效能，所以並不推薦直接使用這個功能作為伺服器給大家看。</em></p>
 <h1><span id="step-6-輸出與上傳">Step 6 - 輸出與上傳</span></h1><p>接下來，如果在本地有用 Nginx 網頁伺服器的話，我們就可以找個目錄來跟部落格作連結。我的作法是這樣。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p &#x2F;var&#x2F;www&#x2F;html&#x2F;blog</span><br><span class="line">sudo chown -R $USER:$USER &#x2F;var&#x2F;www&#x2F;html&#x2F;blog</span><br><span class="line">ln -s &#x2F;var&#x2F;www&#x2F;html&#x2F;blog .&#x2F;blog&#x2F;public</span><br></pre></td></tr></table></figure>
-
 <p>然後，我們就可以進行輸出的動作。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure>
-
 <p>這樣就大功告成了。自己的靜態Markdown部落格建置完成。</p>
 
         </div>
         <div class="article-tags tags">
             
-                <a class="tag-none-link" href="/tags/1609/" rel="tag">1609</a><a class="tag-none-link" href="/tags/CentOS6/" rel="tag">CentOS6</a><a class="tag-none-link" href="/tags/Hexo/" rel="tag">Hexo</a><a class="tag-none-link" href="/tags/Markdown/" rel="tag">Markdown</a>
+                <a class="tag-none-link" href="/tags/CentOS6/" rel="tag">CentOS6</a><a class="tag-none-link" href="/tags/Hexo/" rel="tag">Hexo</a><a class="tag-none-link" href="/tags/Markdown/" rel="tag">Markdown</a>
             
         </div>
     </section>
